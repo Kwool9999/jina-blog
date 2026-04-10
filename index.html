@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지나 블로그 자동화</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #faf9f7;
+    --card: #ffffff;
+    --border: #e8e4dc;
+    --border2: #d4cfc5;
+    --text: #1a1a18;
+    --text2: #6b6860;
+    --text3: #a09d98;
+    --amber: #f5a623;
+    --amber-light: #fef3dc;
+    --amber-dark: #c47d0e;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  .header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    width: 36px; height: 36px;
+    background: var(--amber);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #fff;
+  }
+  .header-title { font-size: 16px; font-weight: 700; }
+  .header-sub { font-size: 12px; color: var(--text2); margin-top: 1px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  .tabs {
+    display: flex;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 20px;
+    gap: 2px;
+  }
+  .tab {
+    flex: 1; padding: 9px 8px;
+    font-size: 13px; font-weight: 500;
+    border: none; background: transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer; color: var(--text2);
+    transition: all 0.15s; font-family: inherit;
+  }
+  .tab.active { background: var(--amber); color: #fff; }
+  .tab:not(.active):hover { background: var(--bg); color: var(--text); }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .cat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .cat-btn {
+    padding: 6px 16px; font-size: 13px;
+    border: 1px solid var(--border2);
+    border-radius: 99px; background: transparent;
+    color: var(--text2); cursor: pointer;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .cat-btn.active { background: var(--amber-light); border-color: var(--amber); color: var(--amber-dark); font-weight: 500; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label { font-size: 12px; color: var(--text2); font-weight: 500; }
+  input, select, textarea {
+    padding: 9px 12px; font-size: 13px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    background: var(--bg); color: var(--text);
+    font-family: inherit; transition: border-color 0.15s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--amber);
+    background: #fff;
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+  .upload-zone {
+    border: 2px dashed var(--border2);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 14px;
+  }
+  .upload-zone:hover { border-color: var(--amber); background: var(--amber-light); }
+  .upload-icon { font-size: 28px; margin-bottom: 8px; }
+  .upload-zone p { font-size: 14px; color: var(--text2); margin-bottom: 3px; }
+  .upload-zone span { font-size: 12px; color: var(--text3); }
+  .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .img-item { position: relative; aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+  .img-item img { width: 100%; height: 100%; object-fit: cover; }
+  .img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: #fff; font-size: 10px; padding: 3px 5px; }
+  .img-del { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; background: rgba(0,0,0,0.6); color: #fff; border-radius: 50%; font-size: 13px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+  .order-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .order-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 12px; }
+  .order-num { width: 22px; height: 22px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .order-thumb { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
+  .order-placement { margin-left: auto; font-size: 11px; color: var(--text3); }
+  .gen-btn {
+    width: 100%; padding: 14px;
+    font-size: 15px; font-weight: 700;
+    background: var(--amber); color: #fff;
+    border: none; border-radius: var(--radius);
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s; margin-top: 4px;
+  }
+  .gen-btn:hover { background: var(--amber-dark); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .output-section { margin-top: 16px; }
+  .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .output-title { font-size: 14px; font-weight: 700; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; }
+  .badge.done { background: #e8f5e9; color: #2e7d32; }
+  .badge.loading { background: var(--amber-light); color: var(--amber-dark); }
+  .output-box {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px;
+    font-size: 13.5px; line-height: 2;
+    white-space: pre-wrap; min-height: 180px;
+    color: var(--text);
+  }
+  .output-box[contenteditable="true"] { outline: 2px solid var(--amber); background: #fff; }
+  .char-count { font-size: 11px; color: var(--text3); text-align: right; margin-top: 6px; }
+  .output-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+  .btn {
+    padding: 8px 18px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--border2); border-radius: var(--radius-sm);
+    background: var(--card); color: var(--text);
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .btn:hover { background: var(--bg); border-color: var(--amber); }
+  .btn.primary { background: var(--amber); color: #fff; border-color: var(--amber); }
+  .btn.primary:hover { background: var(--amber-dark); }
+  .placement-card { margin-top: 14px; }
+  .placement-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .placement-item:last-child { border-bottom: none; }
+  .placement-thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; }
+  .placement-info { flex: 1; }
+  .placement-section { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  .api-row { display: flex; gap: 8px; }
+  .api-row input { flex: 1; font-family: monospace; font-size: 12px; }
+  .info-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 12px; color: var(--text2); line-height: 1.7; margin-top: 10px; }
+  .style-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .chip { padding: 4px 12px; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 99px; color: var(--text2); }
+  .sample-count { font-size: 13px; color: var(--text); font-weight: 500; }
+  .loading-row { display: flex; align-items: center; gap: 8px; }
+  .dots span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #fff; animation: bounce 1.2s infinite; margin: 0 1px; }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .slider-row { display: flex; align-items: center; gap: 12px; }
+  .slider-row input[type=range] { flex: 1; accent-color: var(--amber); }
+  .slider-val { font-size: 13px; font-weight: 500; min-width: 44px; text-align: right; }
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">지</div>
+  <div>
+    <div class="header-title">지나 블로그 자동화</div>
+    <div class="header-sub">이미지 업로드 → AI 글쓰기 → 검수 → 복붙</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('write')">✍️ 글 작성</button>
+    <button class="tab" onclick="switchTab('style')">📋 스타일 가이드</button>
+    <button class="tab" onclick="switchTab('settings')">⚙️ 설정</button>
+  </div>
+
+  <!-- 글 작성 탭 -->
+  <div id="tab-write" class="section active">
+    <div class="card">
+      <div class="card-title">카테고리 & 기본정보</div>
+      <div class="cat-row">
+        <button class="cat-btn active" onclick="selectCat(this,'맛집')">🍽️ 맛집</button>
+        <button class="cat-btn" onclick="selectCat(this,'카페')">☕ 카페</button>
+        <button class="cat-btn" onclick="selectCat(this,'여행')">✈️ 여행</button>
+        <button class="cat-btn" onclick="selectCat(this,'호텔')">🏨 호텔</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>📍 장소명 *</label>
+          <input id="place-name" placeholder="예) 을지로 미진" />
+        </div>
+        <div class="form-group">
+          <label>📅 방문 날짜</label>
+          <input id="visit-date" type="date" />
+        </div>
+        <div class="form-group">
+          <label>📍 주소</label>
+          <input id="place-addr" placeholder="서울시 중구 을지로..." />
+        </div>
+        <div class="form-group">
+          <label>⏰ 운영시간</label>
+          <input id="place-hours" placeholder="11:00 - 21:00 (월 휴무)" />
+        </div>
+        <div class="form-group">
+          <label>🖍️ 예약</label>
+          <input id="place-reserve" placeholder="예) 네이버 예약 가능" />
+        </div>
+        <div class="form-group">
+          <label>🚗 주차</label>
+          <input id="place-park" placeholder="예) 건물 내 2시간 무료" />
+        </div>
+        <div class="form-group full">
+          <label>📝 메모 (주문 메뉴·가격·특이사항 등)</label>
+          <textarea id="place-memo" placeholder="예) 냉면 13,000원, 만두 8,000원 / 줄 30분 기다림 / 점심 피크타임 혼잡"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">이미지 업로드</div>
+      <div class="upload-zone" onclick="document.getElementById('img-input').click()">
+        <input type="file" id="img-input" style="display:none" multiple accept="image/*" onchange="handleImages(event)" />
+        <div class="upload-icon">🖼️</div>
+        <p>클릭해서 이미지 업로드</p>
+        <span>여러 장 한번에 선택 가능해요 · JPG, PNG, HEIC</span>
+      </div>
+      <div class="img-grid" id="img-grid"></div>
+      <div id="order-section" style="display:none">
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500;">AI가 제안하는 이미지 배치 순서</div>
+        <div class="order-list" id="order-list"></div>
+      </div>
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generatePost()">
+      ✨ AI로 블로그 글 생성하기
+    </button>
+
+    <div id="output-section" class="output-section" style="display:none">
+      <div class="card">
+        <div class="output-header">
+          <div class="output-title">생성된 블로그 글</div>
+          <div class="badge done" id="status-badge">✅ 생성 완료</div>
+        </div>
+        <div class="output-box" id="output-box"></div>
+        <div class="char-count" id="char-count"></div>
+        <div class="output-actions">
+          <button class="btn" onclick="regenerate()">🔄 다시 생성</button>
+          <button class="btn" id="edit-btn" onclick="toggleEdit()">✏️ 직접 수정</button>
+          <button class="btn primary" onclick="copyOutput()">📋 복사하기</button>
+        </div>
+      </div>
+
+      <div class="card placement-card" id="placement-card" style="display:none">
+        <div class="card-title">📸 이미지 배치 가이드</div>
+        <div id="placement-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 스타일 가이드 탭 -->
+  <div id="tab-style" class="section">
+    <div class="card">
+      <div class="card-title">지나 블로그 스타일</div>
+      <div class="style-chips">
+        <span class="chip">친근한 존댓말</span>
+        <span class="chip">~해요 / ~이에요 / ~더라고요</span>
+        <span class="chip">독자에게 말 거는 느낌</span>
+        <span class="chip">솔직한 감상</span>
+        <span class="chip">800~1200자</span>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">글 구조 순서</div>
+      <div style="font-size:13px;line-height:2.2;color:var(--text);">
+        1️⃣ 방문 계기 or 한줄 요약 (2~4줄)<br>
+        2️⃣ 기본정보: 📍주소 / ⏰운영시간 / 🖍️예약 / 🚗주차<br>
+        3️⃣ 찾아가는 법 &amp; 외관<br>
+        4️⃣ 내부 분위기<br>
+        5️⃣ 메뉴 소개<br>
+        6️⃣ 주문내역 &amp; 가격<br>
+        7️⃣ 음식 후기 (메뉴별 상세)<br>
+        8️⃣ 마무리 총평 + 추천 + ♥
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">스타일 샘플</div>
+      <div class="info-box" style="font-size:13px;line-height:2;">
+        "오랜만에 을지로 나들이 겸 들렀는데, 생각보다 훨씬 좋더라고요! 줄이 좀 있긴 했지만 기다릴 만한 집이에요 :)<br><br>냉면이 진짜 시원하고 면발이 쫄깃해서 한 그릇 뚝딱 했어요. 육즙 가득한 만두도 꼭 같이 드세요, 강추! ♥"
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">과거 게시글 학습 추가</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.7;">
+        과거 블로그 게시글을 붙여넣으면 지나의 말투를 더 정확하게 학습할 수 있어요.<br>
+        많이 넣을수록 더 자연스러운 글이 나와요! (현재 <span class="sample-count" id="sample-count">0</span>개 학습됨)
+      </p>
+      <textarea id="sample-post" placeholder="과거 블로그 게시글 텍스트를 여기에 붙여넣어 주세요..." style="min-height:120px;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn primary" style="flex:1" onclick="saveSample()">✅ 스타일 학습에 추가</button>
+        <button class="btn" onclick="clearSamples()">🗑️ 전체 삭제</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설정 탭 -->
+  <div id="tab-settings" class="section">
+    <div class="card">
+      <div class="card-title">🔑 Anthropic API 키</div>
+      <div class="api-row">
+        <input type="password" id="api-key" placeholder="sk-ant-api03-..." />
+        <button class="btn primary" onclick="saveApiKey()">저장</button>
+      </div>
+      <div class="info-box">
+        💡 API 키는 이 기기 브라우저에만 저장돼요. 외부로 전송되지 않아요.<br>
+        발급: <strong>console.anthropic.com</strong> → API Keys → Create Key
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✍️ 글 생성 설정</div>
+      <div class="form-group" style="margin-bottom:16px;">
+        <label>목표 글자 수</label>
+        <div class="slider-row" style="margin-top:8px;">
+          <input type="range" min="600" max="1500" step="50" value="1000" id="length-slider"
+            oninput="document.getElementById('length-val').textContent=this.value+'자'" />
+          <div class="slider-val" id="length-val">1000자</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>말투 스타일</label>
+        <select id="tone-select" style="margin-top:6px;">
+          <option>친근하고 편안한 존댓말 (기본)</option>
+          <option>조금 더 활발하고 밝게</option>
+          <option>차분하고 정중하게</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let images = [];
+let selectedCat = '맛집';
+let samplePosts = JSON.parse(localStorage.getItem('jina_samples') || '[]');
+let isEditing = false;
+
+document.getElementById('sample-count').textContent = samplePosts.length;
+
+const saved = localStorage.getItem('jina_api_key');
+if (saved) document.getElementById('api-key').value = saved;
+document.getElementById('visit-date').valueAsDate = new Date();
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['write','style','settings'][i]===name));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+function selectCat(el, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedCat = cat;
+}
+
+function handleImages(e) {
+  const files = Array.from(e.target.files);
+  const placeholders = ['외관','입구','실내','메뉴판','음식1','음식2','음식3','디저트','마무리'];
+  files.forEach(f => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      images.push({ src: ev.target.result, name: f.name });
+      renderImages(placeholders);
+    };
+    reader.readAsDataURL(f);
+  });
+  e.target.value = '';
+}
+
+function renderImages(placeholders) {
+  const p = placeholders || ['외관','입구','실내','메뉴판','음식1','음식2','음식3','디저트','마무리'];
+  const grid = document.getElementById('img-grid');
+  grid.innerHTML = images.map((img,i) => `
+    <div class="img-item">
+      <img src="${img.src}" />
+      <div class="img-label">${i+1}. ${p[i]||'사진'+(i+1)}</div>
+      <button class="img-del" onclick="delImg(${i})">×</button>
+    </div>
+  `).join('');
+  const orderSec = document.getElementById('order-section');
+  const orderList = document.getElementById('order-list');
+  if (images.length > 0) {
+    orderSec.style.display = 'block';
+    orderList.innerHTML = images.map((img,i) => `
+      <div class="order-item">
+        <div class="order-num">${i+1}</div>
+        <img class="order-thumb" src="${img.src}" />
+        <span style="flex:1;font-size:12px;color:var(--text2)">${img.name}</span>
+        <span class="order-placement">${p[i]||'사진'+(i+1)} 위치</span>
+      </div>
+    `).join('');
+  } else {
+    orderSec.style.display = 'none';
+  }
+}
+
+function delImg(i) {
+  images.splice(i, 1);
+  renderImages();
+}
+
+async function generatePost() {
+  const apiKey = document.getElementById('api-key').value || localStorage.getItem('jina_api_key');
+  if (!apiKey) { alert('설정 탭에서 API 키를 먼저 입력해 주세요!'); switchTab('settings'); return; }
+  const placeName = document.getElementById('place-name').value.trim();
+  if (!placeName) { alert('장소명을 입력해 주세요!'); return; }
+
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-row" style="justify-content:center">AI가 글을 쓰는 중이에요&nbsp;<span class="dots"><span></span><span></span><span></span></span></span>';
+
+  const addr = document.getElementById('place-addr').value;
+  const hours = document.getElementById('place-hours').value;
+  const reserve = document.getElementById('place-reserve').value;
+  const park = document.getElementById('place-park').value;
+  const memo = document.getElementById('place-memo').value;
+  const targetLen = document.getElementById('length-slider').value;
+  const tone = document.getElementById('tone-select').value;
+  const imgCount = images.length;
+  const sampleText = samplePosts.slice(-3).join('\n\n---\n\n');
+
+  const sysPrompt = `당신은 '지나'라는 네이버 블로거의 글을 대신 쓰는 에디터입니다.
+
+[말투]
+- 친근한 존댓말 사용 (~해요, ~이에요, ~더라고요)
+- 독자에게 직접 말 거는 느낌으로 작성
+- 솔직하고 생생한 감상 표현
+- 스타일: ${tone}
+
+[글 구조 - 반드시 이 순서로]
+1. 방문 계기 or 한줄 요약 (2~4줄)
+2. 기본정보: 📍주소 / ⏰운영시간 / 🖍️예약 / 🚗주차
+3. 찾아가는 법 & 외관
+4. 내부 분위기
+5. 메뉴 소개
+6. 주문내역 & 가격
+7. 음식 후기 (메뉴별 상세, 생생하게)
+8. 마무리 총평 + 추천 + ♥
+
+[이미지 배치]
+총 ${imgCount}장의 이미지가 있어요. 글 중간중간에 [이미지1], [이미지2] 형태로 어울리는 위치를 표시해 주세요.
+
+[주의사항]
+- 목표 글자 수: ${targetLen}자 내외
+- 문단은 2~4줄로 짧게 끊기
+- 줄바꿈 자주 사용
+- 과장하지 않고 솔직한 후기 스타일 유지
+- 이모지 적절히 사용
+
+${sampleText ? '[참고 스타일 - 과거 게시글]\n' + sampleText : ''}`;
+
+  const userText = `카테고리: ${selectedCat}
+장소명: ${placeName}
+주소: ${addr || '미입력'}
+운영시간: ${hours || '미입력'}
+예약: ${reserve || '미입력'}
+주차: ${park || '미입력'}
+추가 메모: ${memo || '없음'}
+업로드 이미지: ${imgCount}장
+
+위 정보를 바탕으로 지나 블로그 스타일로 게시글을 작성해 주세요.`;
+
+  let msgContent;
+  if (imgCount > 0) {
+    msgContent = [
+      ...images.map(img => ({
+        type: 'image',
+        source: { type: 'base64', media_type: 'image/jpeg', data: img.src.split(',')[1] }
+      })),
+      { type: 'text', text: userText }
+    ];
+  } else {
+    msgContent = userText;
+  }
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        system: sysPrompt,
+        messages: [{ role: 'user', content: msgContent }]
+      })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const text = data.content.map(b => b.text || '').join('');
+    const box = document.getElementById('output-box');
+    box.textContent = text;
+    box.contentEditable = 'false';
+    isEditing = false;
+    document.getElementById('edit-btn').textContent = '✏️ 직접 수정';
+
+    const charCount = text.replace(/\s/g, '').length;
+    document.getElementById('char-count').textContent = `공백 제외 약 ${charCount.toLocaleString()}자`;
+    document.getElementById('status-badge').className = 'badge done';
+    document.getElementById('status-badge').textContent = '✅ 생성 완료';
+
+    renderPlacement(text, imgCount);
+    document.getElementById('output-section').style.display = 'block';
+    document.getElementById('output-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch(err) {
+    alert('오류: ' + err.message + '\n\nAPI 키를 확인해 주세요!');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✨ AI로 블로그 글 생성하기';
+}
+
+function renderPlacement(text, count) {
+  const card = document.getElementById('placement-card');
+  const list = document.getElementById('placement-list');
+  if (count === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  const sections = ['방문 계기','기본정보','외관','실내','메뉴','음식','음식','디저트','마무리'];
+  list.innerHTML = images.map((img, i) => `
+    <div class="placement-item">
+      <div class="order-num" style="flex-shrink:0">${i+1}</div>
+      <img class="placement-thumb" src="${img.src}" />
+      <div class="placement-info">
+        <div style="font-size:13px;font-weight:500;">${img.name}</div>
+        <div class="placement-section">→ <strong>${sections[i]||'마무리'} 섹션</strong> 근처에 배치</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEdit() {
+  const box = document.getElementById('output-box');
+  const btn = document.getElementById('edit-btn');
+  isEditing = !isEditing;
+  box.contentEditable = isEditing ? 'true' : 'false';
+  btn.textContent = isEditing ? '✅ 수정 완료' : '✏️ 직접 수정';
+  if (isEditing) box.focus();
+}
+
+function copyOutput() {
+  const text = document.getElementById('output-box').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ 복사됨!';
+    setTimeout(() => btn.textContent = orig, 1800);
+  });
+}
+
+function regenerate() {
+  document.getElementById('output-section').style.display = 'none';
+  generatePost();
+}
+
+function saveApiKey() {
+  const key = document.getElementById('api-key').value.trim();
+  if (!key) { alert('API 키를 입력해 주세요!'); return; }
+  localStorage.setItem('jina_api_key', key);
+  alert('저장됐어요! 이제 바로 사용할 수 있어요 😊');
+}
+
+function saveSample() {
+  const text = document.getElementById('sample-post').value.trim();
+  if (!text) { alert('텍스트를 붙여넣어 주세요!'); return; }
+  samplePosts.push(text);
+  localStorage.setItem('jina_samples', JSON.stringify(samplePosts));
+  document.getElementById('sample-post').value = '';
+  document.getElementById('sample-count').textContent = samplePosts.length;
+  alert(`추가됐어요! (총 ${samplePosts.length}개 학습됨) 많이 넣을수록 더 자연스러워져요 😊`);
+}
+
+function clearSamples() {
+  if (!confirm('학습된 게시글을 모두 삭제할까요?')) return;
+  samplePosts = [];
+  localStorage.setItem('jina_samples', '[]');
+  document.getElementById('sample-count').textContent = 0;
+  alert('삭제됐어요!');
+}
+</script>
+</body>
+</html>
