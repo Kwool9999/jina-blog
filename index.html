@@ -11,6 +11,7 @@
     --bg: #faf9f7; --card: #ffffff; --border: #e8e4dc; --border2: #d4cfc5;
     --text: #1a1a18; --text2: #6b6860; --text3: #a09d98;
     --amber: #f5a623; --amber-light: #fef3dc; --amber-dark: #c47d0e;
+    --green: #4caf50; --green-light: #e8f5e9;
     --radius: 12px; --radius-sm: 8px;
   }
   body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -26,121 +27,147 @@
   .section { display: none; }
   .section.active { display: block; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
-  .card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); }
-  .cat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-  .cat-btn { padding: 6px 16px; font-size: 13px; border: 1px solid var(--border2); border-radius: 99px; background: transparent; color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
-  .cat-btn.active { background: var(--amber-light); border-color: var(--amber); color: var(--amber-dark); font-weight: 500; }
+  .card-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .cat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .cat-btn { padding: 8px 18px; font-size: 13px; border: 1px solid var(--border2); border-radius: 99px; background: transparent; color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .cat-btn.active { background: var(--amber-light); border-color: var(--amber); color: var(--amber-dark); font-weight: 700; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .form-group { display: flex; flex-direction: column; gap: 5px; }
   .form-group.full { grid-column: 1 / -1; }
   label { font-size: 12px; color: var(--text2); font-weight: 500; }
   input, select, textarea { padding: 9px 12px; font-size: 13px; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-family: inherit; transition: border-color 0.15s; width: 100%; }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--amber); background: #fff; }
-  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
-  .upload-zone { border: 2px dashed var(--border2); border-radius: var(--radius); padding: 28px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 14px; }
-  .upload-zone:hover { border-color: var(--amber); background: var(--amber-light); }
-  .upload-icon { font-size: 28px; margin-bottom: 8px; }
-  .upload-zone p { font-size: 14px; color: var(--text2); margin-bottom: 3px; }
-  .upload-zone span { font-size: 12px; color: var(--text3); }
-  .img-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; margin-bottom: 14px; }
-  .img-item { position: relative; aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
-  .img-item img { width: 100%; height: 100%; object-fit: cover; }
-  .img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: #fff; font-size: 10px; padding: 3px 5px; }
-  .img-del { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; background: rgba(0,0,0,0.6); color: #fff; border-radius: 50%; font-size: 13px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .order-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-  .order-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--bg); border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 12px; }
-  .order-num { width: 22px; height: 22px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .order-thumb { width: 36px; height: 36px; border-radius: 6px; object-fit: cover; }
-  .order-placement { margin-left: auto; font-size: 11px; color: var(--text3); }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.7; }
   .gen-btn { width: 100%; padding: 14px; font-size: 15px; font-weight: 700; background: var(--amber); color: #fff; border: none; border-radius: var(--radius); cursor: pointer; font-family: inherit; transition: all 0.15s; margin-top: 4px; }
   .gen-btn:hover { background: var(--amber-dark); }
   .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .output-section { margin-top: 16px; }
-  .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .output-title { font-size: 14px; font-weight: 700; }
-  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; }
-  .badge.done { background: #e8f5e9; color: #2e7d32; }
-  .output-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; font-size: 13.5px; line-height: 2; white-space: pre-wrap; min-height: 180px; color: var(--text); }
+  .output-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; font-size: 14px; line-height: 2.1; white-space: pre-wrap; min-height: 200px; color: var(--text); }
   .output-box[contenteditable="true"] { outline: 2px solid var(--amber); background: #fff; }
   .char-count { font-size: 11px; color: var(--text3); text-align: right; margin-top: 6px; }
-  .output-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+  .output-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; flex-wrap: wrap; }
   .btn { padding: 8px 18px; font-size: 13px; font-weight: 500; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--card); color: var(--text); cursor: pointer; font-family: inherit; transition: all 0.15s; }
   .btn:hover { background: var(--bg); border-color: var(--amber); }
   .btn.primary { background: var(--amber); color: #fff; border-color: var(--amber); }
   .btn.primary:hover { background: var(--amber-dark); }
-  .placement-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-  .placement-item:last-child { border-bottom: none; }
-  .placement-thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; }
-  .placement-section { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  .info-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 12px; color: var(--text2); line-height: 1.7; margin-top: 10px; }
-  .style-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-  .chip { padding: 4px 12px; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 99px; color: var(--text2); }
+  .info-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 12px; color: var(--text2); line-height: 1.8; margin-top: 10px; }
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .photo-guide { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 10px; }
+  .photo-item { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; }
+  .photo-item.required { border-color: var(--amber); background: var(--amber-light); }
+  .photo-badge { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 99px; margin-bottom: 4px; font-weight: 700; }
+  .photo-badge.req { background: var(--amber); color: #fff; }
+  .photo-badge.opt { background: var(--border); color: var(--text2); }
+  .photo-name { font-weight: 500; color: var(--text); font-size: 13px; }
+  .photo-desc { color: var(--text3); font-size: 11px; margin-top: 2px; }
+  .sample-item { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 12px; color: var(--text2); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .sample-preview { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 10px; }
+  .del-btn { padding: 3px 10px; font-size: 11px; border: 1px solid #ffcdd2; border-radius: 99px; background: #fff; color: #e53935; cursor: pointer; white-space: nowrap; }
   .dots span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #fff; animation: bounce 1.2s infinite; margin: 0 1px; }
   .dots span:nth-child(2) { animation-delay: 0.2s; }
   .dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
-  .divider { height: 1px; background: var(--border); margin: 16px 0; }
-  .slider-row { display: flex; align-items: center; gap: 12px; }
-  .slider-row input[type=range] { flex: 1; accent-color: var(--amber); }
-  .slider-val { font-size: 13px; font-weight: 500; min-width: 44px; text-align: right; }
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 500; }
+  .badge.done { background: var(--green-light); color: var(--green); }
+  .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .output-title { font-size: 14px; font-weight: 700; }
+  .section-label { font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 8px; margin-top: 14px; }
   @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: 1; } }
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo">지</div>
   <div>
     <div class="header-title">지나 블로그 자동화</div>
-    <div class="header-sub">이미지 업로드 → AI 글쓰기 → 검수 → 복붙</div>
+    <div class="header-sub">텍스트 입력 → AI 글쓰기 → 검수 → 복붙</div>
   </div>
 </div>
 
 <div class="container">
   <div class="tabs">
     <button class="tab active" onclick="switchTab('write')">✍️ 글 작성</button>
-    <button class="tab" onclick="switchTab('style')">📋 스타일 가이드</button>
+    <button class="tab" onclick="switchTab('photo')">📸 사진 가이드</button>
+    <button class="tab" onclick="switchTab('learn')">📚 게시글 학습</button>
     <button class="tab" onclick="switchTab('settings')">⚙️ 설정</button>
   </div>
 
+  <!-- 글 작성 탭 -->
   <div id="tab-write" class="section active">
     <div class="card">
-      <div class="card-title">카테고리 & 기본정보</div>
+      <div class="card-title">카테고리 선택</div>
       <div class="cat-row">
         <button class="cat-btn active" onclick="selectCat(this,'맛집')">🍽️ 맛집</button>
         <button class="cat-btn" onclick="selectCat(this,'카페')">☕ 카페</button>
         <button class="cat-btn" onclick="selectCat(this,'여행')">✈️ 여행</button>
-        <button class="cat-btn" onclick="selectCat(this,'호텔')">🏨 호텔</button>
+        <button class="cat-btn" onclick="selectCat(this,'기타')">📌 기타</button>
       </div>
-      <div class="form-grid">
-        <div class="form-group"><label>📍 장소명 *</label><input id="place-name" placeholder="예) 을지로 미진" /></div>
-        <div class="form-group"><label>📅 방문 날짜</label><input id="visit-date" type="date" /></div>
-        <div class="form-group"><label>📍 주소</label><input id="place-addr" placeholder="서울시 중구 을지로..." /></div>
-        <div class="form-group"><label>⏰ 운영시간</label><input id="place-hours" placeholder="11:00 - 21:00 (월 휴무)" /></div>
-        <div class="form-group"><label>🖍️ 예약</label><input id="place-reserve" placeholder="예) 네이버 예약 가능" /></div>
-        <div class="form-group"><label>🚗 주차</label><input id="place-park" placeholder="예) 건물 내 2시간 무료" /></div>
-        <div class="form-group full"><label>📝 메모 (주문 메뉴·가격·특이사항 등)</label><textarea id="place-memo" placeholder="예) 냉면 13,000원, 만두 8,000원 / 줄 30분 기다림"></textarea></div>
-      </div>
-    </div>
 
-    <div class="card">
-      <div class="card-title">이미지 업로드</div>
-      <div class="upload-zone" onclick="document.getElementById('img-input').click()">
-        <input type="file" id="img-input" style="display:none" multiple accept="image/*" onchange="handleImages(event)" />
-        <div class="upload-icon">🖼️</div>
-        <p>클릭해서 이미지 업로드</p>
-        <span>여러 장 한번에 선택 가능해요 · JPG, PNG, HEIC</span>
+      <!-- 맛집 폼 -->
+      <div id="form-맛집">
+        <div class="form-grid">
+          <div class="form-group"><label>📍 장소명 *</label><input id="f-name" placeholder="예) 을지로 초류향" /></div>
+          <div class="form-group"><label>🗺️ 지역 (역/동네)</label><input id="f-area" placeholder="예) 을지로입구역 도보 4분" /></div>
+          <div class="form-group"><label>📍 주소</label><input id="f-addr" placeholder="서울 중구 다동길 24-10" /></div>
+          <div class="form-group"><label>⏰ 운영시간</label><input id="f-hours" placeholder="월-금 11시-22시, 일 휴무" /></div>
+          <div class="form-group"><label>🖍️ 예약</label><input id="f-reserve" placeholder="네이버예약 가능" /></div>
+          <div class="form-group"><label>🚗 주차</label><input id="f-park" placeholder="불가 / 건물 내 무료 2시간" /></div>
+          <div class="form-group"><label>👥 방문 인원 & 동행</label><input id="f-people" placeholder="예) 친구 2명과 / 직장 동료 3명" /></div>
+          <div class="form-group"><label>⏱️ 방문 시간대</label><input id="f-time" placeholder="예) 평일 점심 12시 / 주말 저녁 7시" /></div>
+          <div class="form-group"><label>⏳ 웨이팅</label><input id="f-wait" placeholder="예) 20분 웨이팅 / 예약해서 바로 입장" /></div>
+          <div class="form-group"><label>💡 분위기 특징</label><input id="f-vibe" placeholder="예) 룸 있음, 모던한 인테리어, 넓음" /></div>
+          <div class="form-group full"><label>🍽️ 주문 메뉴 & 가격 *</label><textarea id="f-menu" placeholder="삼선간짜장 10,000원&#10;파리머리볶음 14,000원&#10;마파두부 27,000원"></textarea></div>
+          <div class="form-group full"><label>⭐ 강추 메뉴 (특히 맛있었던 것)</label><input id="f-best" placeholder="예) 마파두부 필수! 짜장면 재방문각" /></div>
+          <div class="form-group full"><label>📝 추가 메모 (특이사항, 이벤트, 팁 등)</label><textarea id="f-memo" placeholder="예) 네이버 영수증 리뷰시 목살 서비스 / 10% 적립 이벤트 / 된장찌개 무한리필"></textarea></div>
+          <div class="form-group full"><label>#️⃣ 해시태그</label><input id="f-tags" placeholder="예) 을지로맛집 을지로중식당 을지로입구역맛집" /></div>
+        </div>
       </div>
-      <div class="img-grid" id="img-grid"></div>
-      <div id="order-section" style="display:none">
-        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;font-weight:500;">AI가 제안하는 이미지 배치 순서</div>
-        <div class="order-list" id="order-list"></div>
+
+      <!-- 카페 폼 -->
+      <div id="form-카페" style="display:none">
+        <div class="form-grid">
+          <div class="form-group"><label>📍 카페명 *</label><input id="c-name" placeholder="예) 성수 블루보틀" /></div>
+          <div class="form-group"><label>🗺️ 지역 (역/동네)</label><input id="c-area" placeholder="예) 성수역 도보 5분" /></div>
+          <div class="form-group"><label>📍 주소</label><input id="c-addr" placeholder="서울 성동구 ..." /></div>
+          <div class="form-group"><label>⏰ 운영시간</label><input id="c-hours" placeholder="매일 9시-21시" /></div>
+          <div class="form-group"><label>🚗 주차</label><input id="c-park" placeholder="불가 / 건물 내 무료" /></div>
+          <div class="form-group"><label>💡 분위기</label><input id="c-vibe" placeholder="예) 인더스트리얼, 루프탑, 아늑함" /></div>
+          <div class="form-group full"><label>☕ 주문 메뉴 & 가격 *</label><textarea id="c-menu" placeholder="아메리카노 6,500원&#10;시그니처 라떼 8,000원&#10;스콘 4,500원"></textarea></div>
+          <div class="form-group full"><label>⭐ 강추 메뉴</label><input id="c-best" placeholder="예) 시그니처 라떼 필수! 디저트류도 굿" /></div>
+          <div class="form-group full"><label>📸 포토스팟</label><input id="c-photo" placeholder="예) 2층 창가, 루프탑, 입구 간판 앞" /></div>
+          <div class="form-group full"><label>📝 추가 메모</label><textarea id="c-memo" placeholder="예) 주말 웨이팅 있음 / 노트북 작업하기 좋음 / 콘센트 있음"></textarea></div>
+          <div class="form-group full"><label>#️⃣ 해시태그</label><input id="c-tags" placeholder="예) 성수카페 성수감성카페 서울카페투어" /></div>
+        </div>
+      </div>
+
+      <!-- 여행 폼 -->
+      <div id="form-여행" style="display:none">
+        <div class="form-grid">
+          <div class="form-group"><label>✈️ 여행지 *</label><input id="t-dest" placeholder="예) 순천, 제주 서귀포, 일본 교토" /></div>
+          <div class="form-group"><label>📅 여행 기간</label><input id="t-period" placeholder="예) 1박2일 / 당일치기" /></div>
+          <div class="form-group full"><label>🗺️ 주요 방문 장소들 *</label><textarea id="t-places" placeholder="1. 순천만 국가정원&#10;2. 순천역 이레돈까스&#10;3. 낙안읍성"></textarea></div>
+          <div class="form-group full"><label>🚗 이동 수단</label><input id="t-transport" placeholder="예) KTX → 도보 / 렌트카 / 대중교통" /></div>
+          <div class="form-group full"><label>🏨 숙소</label><input id="t-hotel" placeholder="예) 순천만 인근 호텔 / 당일치기라 없음" /></div>
+          <div class="form-group full"><label>💡 여행 하이라이트</label><textarea id="t-highlight" placeholder="예) 순천만 갈대숲 일몰이 진짜 장관이었어요 / 이레돈까스 돈까스가 너무 맛있었음"></textarea></div>
+          <div class="form-group full"><label>💰 예상 경비</label><input id="t-cost" placeholder="예) 교통비 5만원 + 식비 3만원 + 입장료 1만원" /></div>
+          <div class="form-group full"><label>📝 추가 팁 & 메모</label><textarea id="t-memo" placeholder="예) 주말엔 순천만 주차 혼잡 / 돈까스집 일요일 정기휴무 주의"></textarea></div>
+          <div class="form-group full"><label>#️⃣ 해시태그</label><input id="t-tags" placeholder="예) 순천여행 순천당일치기 전남여행" /></div>
+        </div>
+      </div>
+
+      <!-- 기타 폼 -->
+      <div id="form-기타" style="display:none">
+        <div class="form-grid">
+          <div class="form-group"><label>📌 주제 *</label><input id="e-title" placeholder="예) 성수 팝업스토어 / 강남 뮤지컬 후기" /></div>
+          <div class="form-group"><label>📍 장소</label><input id="e-place" placeholder="예) 성수동 / 강남 LG아트센터" /></div>
+          <div class="form-group full"><label>📝 내용 *</label><textarea id="e-content" placeholder="자유롭게 내용을 적어주세요. 경험, 느낀점, 특이사항 등 모두 적어주시면 더 풍부한 글이 나와요!" style="min-height:120px;"></textarea></div>
+          <div class="form-group full"><label>#️⃣ 해시태그</label><input id="e-tags" placeholder="관련 해시태그를 입력해 주세요" /></div>
+        </div>
       </div>
     </div>
 
     <button class="gen-btn" id="gen-btn" onclick="generatePost()">✨ AI로 블로그 글 생성하기</button>
 
-    <div id="output-section" class="output-section" style="display:none">
+    <div id="output-section" style="display:none; margin-top:16px;">
       <div class="card">
         <div class="output-header">
           <div class="output-title">생성된 블로그 글</div>
@@ -151,59 +178,86 @@
         <div class="output-actions">
           <button class="btn" onclick="regenerate()">🔄 다시 생성</button>
           <button class="btn" id="edit-btn" onclick="toggleEdit()">✏️ 직접 수정</button>
-          <button class="btn primary" onclick="copyOutput()">📋 복사하기</button>
+          <button class="btn primary" onclick="copyOutput()">📋 네이버 블로그에 복붙하기</button>
         </div>
       </div>
-      <div class="card" id="placement-card" style="display:none">
-        <div class="card-title">📸 이미지 배치 가이드</div>
-        <div id="placement-list"></div>
+    </div>
+  </div>
+
+  <!-- 사진 가이드 탭 -->
+  <div id="tab-photo" class="section">
+    <div class="card">
+      <div class="card-title">📸 맛집 필수 사진 체크리스트</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.7;">블로그 게시글 퀄리티를 높이는 사진 구성이에요. ⭐ 필수는 꼭 찍어오세요!</p>
+      <div class="photo-guide">
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🏢 외관</div><div class="photo-desc">건물 전체 or 간판이 보이게</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🚪 입구</div><div class="photo-desc">메뉴판/입간판 포함하면 굿</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🪑 내부 전경</div><div class="photo-desc">분위기 파악되게 넓게</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">📋 메뉴판</div><div class="photo-desc">가격 보이게 선명하게</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🍽️ 음식 (메인)</div><div class="photo-desc">주문한 메뉴 각각 1장씩</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🥢 음식 (클로즈업)</div><div class="photo-desc">단면/육즙/식감 강조</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">🥗 기본찬</div><div class="photo-desc">반찬/세팅 상태</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">✨ 특별포인트</div><div class="photo-desc">특이한 인테리어, 이벤트 등</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">🧾 영수증/이벤트</div><div class="photo-desc">네이버 리뷰 이벤트 등</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">☕ 카페 필수 사진 체크리스트</div>
+      <div class="photo-guide">
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🏢 외관/간판</div><div class="photo-desc">카페 분위기 첫인상</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🪑 내부 전경</div><div class="photo-desc">감성 인테리어 담기</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">☕ 음료 (플랫레이)</div><div class="photo-desc">위에서 찍기, 감성있게</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🎂 디저트</div><div class="photo-desc">시그니처 디저트</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">🪟 창가/포토스팟</div><div class="photo-desc">인생샷 포인트</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">📋 메뉴판</div><div class="photo-desc">가격 확인용</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">✈️ 여행 필수 사진 체크리스트</div>
+      <div class="photo-guide">
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🌅 대표 풍경</div><div class="photo-desc">여행지 상징 장면</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🗺️ 장소별 사진</div><div class="photo-desc">방문 장소마다 1-2장</div></div>
+        <div class="photo-item required"><div class="photo-badge req">⭐ 필수</div><div class="photo-name">🍽️ 현지 음식</div><div class="photo-desc">먹은 것들 기록</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">🚉 이동 수단</div><div class="photo-desc">KTX, 버스 등</div></div>
+        <div class="photo-item"><div class="photo-badge opt">선택</div><div class="photo-name">🏨 숙소</div><div class="photo-desc">뷰, 객실 분위기</div></div>
       </div>
     </div>
   </div>
 
-  <div id="tab-style" class="section">
+  <!-- 게시글 학습 탭 -->
+  <div id="tab-learn" class="section">
     <div class="card">
-      <div class="card-title">지나 블로그 스타일</div>
-      <div class="style-chips">
-        <span class="chip">친근한 존댓말</span><span class="chip">~해요 / ~이에요 / ~더라고요</span>
-        <span class="chip">독자에게 말 거는 느낌</span><span class="chip">솔직한 감상</span><span class="chip">800~1200자</span>
+      <div class="card-title">📚 과거 게시글 학습</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:4px;line-height:1.7;">과거 블로그 게시글을 붙여넣으면 지나의 말투를 더 정확하게 학습해요.</p>
+      <p style="font-size:13px;color:var(--amber-dark);margin-bottom:14px;font-weight:500;">현재 <span id="sample-count">0</span>개 학습됨 — 많을수록 더 자연스러워요! 💪</p>
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>제목 (구분용)</label>
+        <input id="sample-title" placeholder="예) 을지로 초류향 중식당" />
       </div>
-      <div class="divider"></div>
-      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">글 구조 순서</div>
-      <div style="font-size:13px;line-height:2.2;">
-        1️⃣ 방문 계기 or 한줄 요약 (2~4줄)<br>
-        2️⃣ 기본정보: 📍주소 / ⏰운영시간 / 🖍️예약 / 🚗주차<br>
-        3️⃣ 찾아가는 법 &amp; 외관<br>4️⃣ 내부 분위기<br>5️⃣ 메뉴 소개<br>
-        6️⃣ 주문내역 &amp; 가격<br>7️⃣ 음식 후기 (메뉴별 상세)<br>8️⃣ 마무리 총평 + 추천 + ♥
+      <div class="form-group" style="margin-bottom:10px;">
+        <label>게시글 내용</label>
+        <textarea id="sample-post" placeholder="블로그 게시글 전체 텍스트를 붙여넣어 주세요..." style="min-height:140px;"></textarea>
       </div>
-      <div class="divider"></div>
-      <div style="font-size:13px;font-weight:700;margin-bottom:10px;">스타일 샘플</div>
-      <div class="info-box" style="font-size:13px;line-height:2;">
-        "오랜만에 을지로 나들이 겸 들렀는데, 생각보다 훨씬 좋더라고요! 줄이 좀 있긴 했지만 기다릴 만한 집이에요 :)<br><br>냉면이 진짜 시원하고 면발이 쫄깃해서 한 그릇 뚝딱 했어요. 육즙 가득한 만두도 꼭 같이 드세요, 강추! ♥"
-      </div>
+      <button class="btn primary" style="width:100%;" onclick="saveSample()">✅ 학습에 추가하기</button>
     </div>
+
     <div class="card">
-      <div class="card-title">과거 게시글 학습 추가</div>
-      <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.7;">
-        과거 블로그 게시글을 붙여넣으면 지나의 말투를 더 정확하게 학습해요.<br>
-        현재 <strong id="sample-count">0</strong>개 학습됨
-      </p>
-      <textarea id="sample-post" placeholder="과거 블로그 게시글 텍스트를 여기에 붙여넣어 주세요..." style="min-height:120px;"></textarea>
-      <div style="display:flex;gap:8px;margin-top:10px;">
-        <button class="btn primary" style="flex:1" onclick="saveSample()">✅ 스타일 학습에 추가</button>
-        <button class="btn" onclick="clearSamples()">🗑️ 전체 삭제</button>
+      <div class="card-title">📋 학습된 게시글 목록</div>
+      <div id="sample-list">
+        <p style="font-size:13px;color:var(--text3);text-align:center;padding:20px;">아직 학습된 게시글이 없어요.<br>위에서 추가해 주세요!</p>
       </div>
     </div>
   </div>
 
+  <!-- 설정 탭 -->
   <div id="tab-settings" class="section">
     <div class="card">
       <div class="card-title">✍️ 글 생성 설정</div>
       <div class="form-group" style="margin-bottom:16px;">
         <label>목표 글자 수</label>
-        <div class="slider-row" style="margin-top:8px;">
-          <input type="range" min="600" max="1500" step="50" value="1000" id="length-slider" oninput="document.getElementById('length-val').textContent=this.value+'자'" />
-          <div class="slider-val" id="length-val">1000자</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:8px;">
+          <input type="range" min="600" max="1500" step="50" value="1000" id="length-slider" style="flex:1;accent-color:var(--amber);" oninput="document.getElementById('length-val').textContent=this.value+'자'" />
+          <span id="length-val" style="font-size:13px;font-weight:500;min-width:44px;text-align:right;">1000자</span>
         </div>
       </div>
       <div class="form-group">
@@ -216,147 +270,194 @@
       </div>
     </div>
     <div class="card">
-      <div class="card-title">ℹ️ API 키 안내</div>
+      <div class="card-title">ℹ️ API 안내</div>
       <div class="info-box">
-        이 버전은 API 키를 Vercel 서버에 안전하게 저장해요.<br>
-        별도 입력 없이 바로 사용 가능해요! 😊<br><br>
-        API 키 변경이 필요하면 Vercel 대시보드 → 프로젝트 → Settings → Environment Variables 에서 수정하세요.
+        API 키는 Vercel 서버에 안전하게 저장되어 있어요. 별도 입력 없이 바로 사용 가능해요! 😊<br><br>
+        API 키 변경 필요시: Vercel 대시보드 → 프로젝트 → Settings → Environment Variables
       </div>
     </div>
   </div>
 </div>
 
 <script>
-let images = [], selectedCat = '맛집', isEditing = false;
-let samplePosts = JSON.parse(localStorage.getItem('jina_samples') || '[]');
-document.getElementById('sample-count').textContent = samplePosts.length;
-document.getElementById('visit-date').valueAsDate = new Date();
+let selectedCat = '맛집';
+let isEditing = false;
+let samplePosts = JSON.parse(localStorage.getItem('jina_samples_v2') || '[]');
+updateSampleUI();
 
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['write','style','settings'][i]===name));
+  const names = ['write','photo','learn','settings'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i]===name));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
 }
+
 function selectCat(el, cat) {
   document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active'); selectedCat = cat;
-}
-function compressImage(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const MAX = 800;
-        let w = img.width, h = img.height;
-        if (w > h && w > MAX) { h = h * MAX / w; w = MAX; }
-        else if (h > MAX) { w = w * MAX / h; h = MAX; }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve({ src: canvas.toDataURL('image/jpeg', 0.75), name: file.name });
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
+  el.classList.add('active');
+  selectedCat = cat;
+  ['맛집','카페','여행','기타'].forEach(c => {
+    document.getElementById('form-'+c).style.display = c===cat ? 'block' : 'none';
   });
 }
 
-async function handleImages(e) {
-  const p = ['외관','입구','실내','메뉴판','음식1','음식2','음식3','디저트','마무리'];
-  const files = Array.from(e.target.files);
-  for (const f of files) {
-    const compressed = await compressImage(f);
-    images.push(compressed);
-    renderImages(p);
-  }
-  e.target.value = '';
+function getFormData() {
+  const g = id => (document.getElementById(id)||{}).value || '';
+  if (selectedCat === '맛집') return {
+    name: g('f-name'), area: g('f-area'), addr: g('f-addr'), hours: g('f-hours'),
+    reserve: g('f-reserve'), park: g('f-park'), people: g('f-people'), time: g('f-time'),
+    wait: g('f-wait'), vibe: g('f-vibe'), menu: g('f-menu'), best: g('f-best'),
+    memo: g('f-memo'), tags: g('f-tags')
+  };
+  if (selectedCat === '카페') return {
+    name: g('c-name'), area: g('c-area'), addr: g('c-addr'), hours: g('c-hours'),
+    park: g('c-park'), vibe: g('c-vibe'), menu: g('c-menu'), best: g('c-best'),
+    photo: g('c-photo'), memo: g('c-memo'), tags: g('c-tags')
+  };
+  if (selectedCat === '여행') return {
+    dest: g('t-dest'), period: g('t-period'), places: g('t-places'), transport: g('t-transport'),
+    hotel: g('t-hotel'), highlight: g('t-highlight'), cost: g('t-cost'), memo: g('t-memo'), tags: g('t-tags')
+  };
+  return { title: g('e-title'), place: g('e-place'), content: g('e-content'), tags: g('e-tags') };
 }
-function renderImages(p) {
-  const ph = p || ['외관','입구','실내','메뉴판','음식1','음식2','음식3','디저트','마무리'];
-  document.getElementById('img-grid').innerHTML = images.map((img,i) => `
-    <div class="img-item"><img src="${img.src}" />
-    <div class="img-label">${i+1}. ${ph[i]||'사진'+(i+1)}</div>
-    <button class="img-del" onclick="delImg(${i})">×</button></div>`).join('');
-  const os = document.getElementById('order-section');
-  if (images.length > 0) {
-    os.style.display = 'block';
-    document.getElementById('order-list').innerHTML = images.map((img,i) => `
-      <div class="order-item"><div class="order-num">${i+1}</div>
-      <img class="order-thumb" src="${img.src}" />
-      <span style="flex:1;font-size:12px;color:var(--text2)">${img.name}</span>
-      <span class="order-placement">${ph[i]||'사진'+(i+1)} 위치</span></div>`).join('');
-  } else os.style.display = 'none';
+
+function buildUserMessage(data) {
+  if (selectedCat === '맛집') return `카테고리: 맛집
+장소명: ${data.name}
+지역/교통: ${data.area||'미입력'}
+주소: ${data.addr||'미입력'}
+운영시간: ${data.hours||'미입력'}
+예약: ${data.reserve||'미입력'}
+주차: ${data.park||'미입력'}
+방문 인원/동행: ${data.people||'미입력'}
+방문 시간대: ${data.time||'미입력'}
+웨이팅: ${data.wait||'미입력'}
+분위기/특징: ${data.vibe||'미입력'}
+주문 메뉴 & 가격:
+${data.menu||'미입력'}
+강추 메뉴: ${data.best||'미입력'}
+추가 메모: ${data.memo||'없음'}
+해시태그: ${data.tags||'없음'}`;
+
+  if (selectedCat === '카페') return `카테고리: 카페
+카페명: ${data.name}
+지역/교통: ${data.area||'미입력'}
+주소: ${data.addr||'미입력'}
+운영시간: ${data.hours||'미입력'}
+주차: ${data.park||'미입력'}
+분위기: ${data.vibe||'미입력'}
+주문 메뉴 & 가격:
+${data.menu||'미입력'}
+강추 메뉴: ${data.best||'미입력'}
+포토스팟: ${data.photo||'미입력'}
+추가 메모: ${data.memo||'없음'}
+해시태그: ${data.tags||'없음'}`;
+
+  if (selectedCat === '여행') return `카테고리: 여행
+여행지: ${data.dest}
+기간: ${data.period||'미입력'}
+방문 장소:
+${data.places||'미입력'}
+이동수단: ${data.transport||'미입력'}
+숙소: ${data.hotel||'미입력'}
+하이라이트: ${data.highlight||'미입력'}
+경비: ${data.cost||'미입력'}
+추가 팁: ${data.memo||'없음'}
+해시태그: ${data.tags||'없음'}`;
+
+  return `카테고리: 기타
+주제: ${data.title}
+장소: ${data.place||'미입력'}
+내용: ${data.content}
+해시태그: ${data.tags||'없음'}`;
 }
-function delImg(i) { images.splice(i,1); renderImages(); }
+
+function buildSystemPrompt() {
+  const sampleText = samplePosts.length > 0
+    ? '\n\n[지나의 실제 블로그 글 스타일 참고 - 이 말투와 구조를 최대한 따라하세요]\n' + samplePosts.slice(-4).map(s => s.content).join('\n\n---\n\n')
+    : '';
+
+  const structureGuide = selectedCat === '맛집' ? `
+[맛집 글 구조 - 반드시 이 순서로]
+1. 방문 계기 or 한줄 요약 (2~3줄, 독자 시선 사로잡기)
+2. 장소 기본정보 블록: 📍주소 / ⏰운영시간 / 🖍️예약 / 🚗주차 (줄바꿈으로 정리)
+3. 찾아가는 법 & 외관 → (외관 사진) (입구 사진)
+4. 내부 분위기 → (내부 전경 사진)
+5. 메뉴판 소개 → (메뉴판 사진)
+6. 기본찬/세팅 → (기본찬 사진)
+7. 주문 내역 & 각 메뉴 후기 (메뉴별로 가격 포함, 생생하게) → 각 음식마다 (음식 사진)
+8. 마무리 총평 + 추천 대상 + 재방문 의사 + ♥︎
+9. 해시태그 (입력된 태그 사용)` : selectedCat === '카페' ? `
+[카페 글 구조]
+1. 방문 계기 & 첫인상 (2~3줄)
+2. 기본정보: 📍주소 / ⏰운영시간 / 🚗주차
+3. 외관 & 찾아가는 법 → (외관 사진)
+4. 내부 분위기 & 인테리어 → (내부 사진)
+5. 메뉴 소개 → (메뉴판 사진)
+6. 음료 & 디저트 후기 → (음료 사진) (디저트 사진)
+7. 포토스팟 소개 → (포토스팟 사진)
+8. 마무리 총평 + 추천 + ♥︎
+9. 해시태그` : selectedCat === '여행' ? `
+[여행 글 구조]
+1. 여행 소개 & 가게 된 계기 (2~3줄)
+2. 여행 기본 정보 (기간, 이동수단, 경비)
+3. 장소별 방문 후기 (순서대로, 각 장소마다 사진 태그 포함) → (장소 사진)
+4. 먹은 것들 소개 → (음식 사진)
+5. 여행 하이라이트 & 인상 깊었던 순간
+6. 총평 + 추천 대상 + 다음에 또 가고 싶은지 + ♥︎
+7. 해시태그` : `[글 구조]
+1. 소개 & 방문 계기
+2. 상세 내용 (사진 위치 태그 적절히 삽입)
+3. 마무리 & 추천
+4. 해시태그`;
+
+  return `당신은 '지나'라는 네이버 블로거의 글을 대신 쓰는 에디터입니다.
+
+[말투 규칙]
+- 친근한 존댓말 (~해요, ~이에요, ~더라고요, ~답니다)
+- 독자에게 직접 말 거는 느낌으로 작성
+- 솔직하고 생생한 감상 (과장 없이 진짜 느낀 점)
+- 이모지 적절히 사용 (너무 많지 않게)
+- 문단은 2~4줄로 짧게, 줄바꿈 자주
+- 스타일: ${document.getElementById('tone-select').value}
+- 목표 글자 수: ${document.getElementById('length-slider').value}자 내외
+
+[사진 위치 태그 규칙]
+글 중간중간에 반드시 사진 위치를 표시해 주세요.
+형식: (외관 사진) (입구 사진) (내부 전경 사진) (메뉴판 사진) (기본찬 사진) (음식명 사진) 등
+실제 올릴 사진 종류에 맞게 자연스럽게 삽입하세요.
+${structureGuide}${sampleText}`;
+}
 
 async function generatePost() {
-  const placeName = document.getElementById('place-name').value.trim();
-  if (!placeName) { alert('장소명을 입력해 주세요!'); return; }
+  const data = getFormData();
+  const nameField = selectedCat==='맛집'?data.name : selectedCat==='카페'?data.name : selectedCat==='여행'?data.dest : data.title;
+  if (!nameField) { alert(selectedCat==='여행'?'여행지를 입력해 주세요!':'장소명을 입력해 주세요!'); return; }
 
   const btn = document.getElementById('gen-btn');
   btn.disabled = true;
   btn.innerHTML = '<span style="display:inline-flex;align-items:center;justify-content:center;gap:8px;">AI가 글을 쓰는 중이에요 <span class="dots"><span></span><span></span><span></span></span></span>';
 
-  const sysPrompt = `당신은 '지나'라는 네이버 블로거의 글을 대신 쓰는 에디터입니다.
-
-[말투]
-- 친근한 존댓말 사용 (~해요, ~이에요, ~더라고요)
-- 독자에게 직접 말 거는 느낌으로 작성
-- 솔직하고 생생한 감상 표현
-- 스타일: ${document.getElementById('tone-select').value}
-
-[글 구조 - 반드시 이 순서로]
-1. 방문 계기 or 한줄 요약 (2~4줄)
-2. 기본정보: 📍주소 / ⏰운영시간 / 🖍️예약 / 🚗주차
-3. 찾아가는 법 & 외관
-4. 내부 분위기
-5. 메뉴 소개
-6. 주문내역 & 가격
-7. 음식 후기 (메뉴별 상세, 생생하게)
-8. 마무리 총평 + 추천 + ♥
-
-[이미지 배치]
-총 ${images.length}장의 이미지가 있어요. 글 중간중간에 [이미지1], [이미지2] 형태로 위치를 표시해 주세요.
-
-[주의사항]
-- 목표 글자 수: ${document.getElementById('length-slider').value}자 내외
-- 문단은 2~4줄로 짧게 끊기, 줄바꿈 자주 사용
-- 과장하지 않고 솔직한 후기 스타일
-${samplePosts.length > 0 ? '\n[참고 스타일]\n' + samplePosts.slice(-3).join('\n\n---\n\n') : ''}`;
-
-  const userText = `카테고리: ${selectedCat}
-장소명: ${placeName}
-주소: ${document.getElementById('place-addr').value || '미입력'}
-운영시간: ${document.getElementById('place-hours').value || '미입력'}
-예약: ${document.getElementById('place-reserve').value || '미입력'}
-주차: ${document.getElementById('place-park').value || '미입력'}
-추가 메모: ${document.getElementById('place-memo').value || '없음'}
-업로드 이미지: ${images.length}장
-
-위 정보를 바탕으로 지나 블로그 스타일로 게시글을 작성해 주세요.`;
-
-  let msgContent = images.length > 0 ? [
-    ...images.map(img => ({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: img.src.split(',')[1] } })),
-    { type: 'text', text: userText }
-  ] : userText;
-
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2000, system: sysPrompt, messages: [{ role: 'user', content: msgContent }] })
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2500,
+        system: buildSystemPrompt(),
+        messages: [{ role: 'user', content: buildUserMessage(data) }]
+      })
     });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-    const text = data.content.map(b => b.text || '').join('');
+    const result = await res.json();
+    if (result.error) throw new Error(result.error.message || JSON.stringify(result.error));
+    const text = result.content.map(b => b.text||'').join('');
     const box = document.getElementById('output-box');
     box.textContent = text;
     box.contentEditable = 'false';
     isEditing = false;
     document.getElementById('edit-btn').textContent = '✏️ 직접 수정';
     document.getElementById('char-count').textContent = `공백 제외 약 ${text.replace(/\s/g,'').length.toLocaleString()}자`;
-    renderPlacement(images.length);
     document.getElementById('output-section').style.display = 'block';
     document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
   } catch(err) {
@@ -366,19 +467,6 @@ ${samplePosts.length > 0 ? '\n[참고 스타일]\n' + samplePosts.slice(-3).join
   btn.textContent = '✨ AI로 블로그 글 생성하기';
 }
 
-function renderPlacement(count) {
-  const card = document.getElementById('placement-card');
-  if (count === 0) { card.style.display = 'none'; return; }
-  card.style.display = 'block';
-  const sections = ['방문 계기','기본정보','외관','실내','메뉴','음식','음식','디저트','마무리'];
-  document.getElementById('placement-list').innerHTML = images.map((img,i) => `
-    <div class="placement-item">
-      <div class="order-num" style="flex-shrink:0">${i+1}</div>
-      <img class="placement-thumb" src="${img.src}" />
-      <div><div style="font-size:13px;font-weight:500;">${img.name}</div>
-      <div class="placement-section">→ <strong>${sections[i]||'마무리'} 섹션</strong> 근처에 배치</div></div>
-    </div>`).join('');
-}
 function toggleEdit() {
   const box = document.getElementById('output-box'), btn = document.getElementById('edit-btn');
   isEditing = !isEditing;
@@ -386,26 +474,52 @@ function toggleEdit() {
   btn.textContent = isEditing ? '✅ 수정 완료' : '✏️ 직접 수정';
   if (isEditing) box.focus();
 }
+
 function copyOutput() {
   navigator.clipboard.writeText(document.getElementById('output-box').innerText).then(() => {
-    const btn = event.target; btn.textContent = '✅ 복사됨!';
-    setTimeout(() => btn.textContent = '📋 복사하기', 1800);
+    const btn = event.target; const orig = btn.textContent;
+    btn.textContent = '✅ 복사됨!';
+    setTimeout(() => btn.textContent = orig, 1800);
   });
 }
-function regenerate() { document.getElementById('output-section').style.display = 'none'; generatePost(); }
-function saveSample() {
-  const text = document.getElementById('sample-post').value.trim();
-  if (!text) { alert('텍스트를 붙여넣어 주세요!'); return; }
-  samplePosts.push(text);
-  localStorage.setItem('jina_samples', JSON.stringify(samplePosts));
-  document.getElementById('sample-post').value = '';
-  document.getElementById('sample-count').textContent = samplePosts.length;
-  alert(`추가됐어요! (총 ${samplePosts.length}개 학습됨)`);
+
+function regenerate() {
+  document.getElementById('output-section').style.display = 'none';
+  generatePost();
 }
-function clearSamples() {
+
+function saveSample() {
+  const title = document.getElementById('sample-title').value.trim();
+  const content = document.getElementById('sample-post').value.trim();
+  if (!content) { alert('게시글 내용을 붙여넣어 주세요!'); return; }
+  samplePosts.push({ title: title||'게시글 '+(samplePosts.length+1), content, date: new Date().toLocaleDateString('ko-KR') });
+  localStorage.setItem('jina_samples_v2', JSON.stringify(samplePosts));
+  document.getElementById('sample-title').value = '';
+  document.getElementById('sample-post').value = '';
+  updateSampleUI();
+  alert(`추가됐어요! (총 ${samplePosts.length}개 학습됨) 많을수록 더 자연스러워요 😊`);
+}
+
+function deleteSample(i) {
   if (!confirm('삭제할까요?')) return;
-  samplePosts = []; localStorage.setItem('jina_samples', '[]');
-  document.getElementById('sample-count').textContent = 0;
+  samplePosts.splice(i, 1);
+  localStorage.setItem('jina_samples_v2', JSON.stringify(samplePosts));
+  updateSampleUI();
+}
+
+function updateSampleUI() {
+  document.getElementById('sample-count').textContent = samplePosts.length;
+  const list = document.getElementById('sample-list');
+  if (!list) return;
+  if (samplePosts.length === 0) {
+    list.innerHTML = '<p style="font-size:13px;color:var(--text3);text-align:center;padding:20px;">아직 학습된 게시글이 없어요.<br>위에서 추가해 주세요!</p>';
+    return;
+  }
+  list.innerHTML = samplePosts.map((s,i) => `
+    <div class="sample-item">
+      <div class="sample-preview"><strong>${s.title}</strong> · ${s.date}</div>
+      <button class="del-btn" onclick="deleteSample(${i})">삭제</button>
+    </div>`).join('');
 }
 </script>
 </body>
